@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-node-selector
+  labels:
+    app: nginx
+spec:
+  nodeSelector:
+    disktype: ssd
+    environment: production
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80

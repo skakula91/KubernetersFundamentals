@@ -1,0 +1,23 @@
+# Refer taints applied commands on taint-commands.md
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-with-toleration
+  labels:
+    app: nginx
+spec:
+  tolerations:
+  - key: "environment"
+    operator: "Equal"
+    value: "production"
+    effect: "NoSchedule"
+  - key: "node-type"
+    operator: "Equal"
+    value: "gpu"
+    effect: "NoExecute"
+    tolerationSeconds: 3600
+  containers:
+  - name: nginx
+    image: nginx:latest
+    ports:
+    - containerPort: 80

@@ -1,19 +1,74 @@
 # Kubernetes Learning Repository
 
-A structured collection of Kubernetes YAML definitions for learning core concepts.
+A structured collection of Kubernetes YAML definitions for learning core concepts. Each folder contains practical examples that you can deploy and experiment with to understand how Kubernetes works.
 
 ## Structure
 
-- **pods/** - Pod definitions (basic/advanced)
-- **replicasets/** - ReplicaSet configurations
-- **deployments/** - Deployment manifests (basic/advanced)
-- **services/** - Service definitions (basic/advanced)
-- **configmaps/** - ConfigMap examples
-- **secrets/** - Secret configurations
-- **namespaces/** - Namespace definitions
-- **ingress/** - Ingress controllers and rules
-- **jobs/** - Job and CronJob definitions
-- **volumes/** - Storage configurations (PV, PVC, StorageClass)
+### **pods/** - Pod definitions (basic/advanced)
+The fundamental building blocks of Kubernetes. Start here to understand how containers run in Kubernetes.
+
+**Basic Examples:**
+- `nginx-pod.yaml` - Simple nginx pod to get you started
+- `nginx-with-config-secret.yaml` - Shows how to inject configuration and secrets into pods
+
+**Advanced Examples:**
+- `nginx-security-context.yaml` - Security hardening with user/group settings and capabilities
+- `nginx-resource-limits.yaml` - CPU and memory requests/limits for resource management
+- `nginx-with-toleration.yaml` - How pods can tolerate node taints for specialized scheduling
+- `nginx-with-service-account.yaml` - Using service accounts for pod identity and API access
+
+### **replicasets/** - ReplicaSet configurations
+Ensures multiple copies of your pods are always running. Think of it as a pod babysitter.
+- `nginx-replicaset.yaml` - Maintains 3 nginx pods automatically
+
+### **deployments/** - Deployment manifests (basic/advanced)
+The preferred way to run applications. Deployments manage ReplicaSets and provide rolling updates.
+
+**Basic Examples:**
+- `nginx-deployment.yaml` - Standard deployment with 3 replicas and update capabilities
+
+### **services/** - Service definitions (basic/advanced)
+How pods communicate with each other and the outside world.
+
+**Basic Examples:**
+- `nginx-clusterip-service.yaml` - Internal cluster communication only
+- `nginx-nodeport-service.yaml` - External access via node ports
+
+**Advanced Examples:**
+- `nginx-loadbalancer-service.yaml` - AWS Load Balancer for production traffic
+
+### **configmaps/** - ConfigMap examples
+Store configuration data separately from your container images.
+- `nginx-configmap.yaml` - Configuration files and environment variables
+
+### **secrets/** - Secret configurations
+Securely store sensitive data like passwords and API keys.
+- `nginx-secret.yaml` - Base64 encoded credentials and tokens
+
+### **namespaces/** - Namespace definitions
+Organize and isolate resources within your cluster.
+- `development-namespace.yaml` - Dev environment isolation
+- `production-namespace.yaml` - Prod environment isolation
+- `testing-namespace.yaml` - Test environment isolation
+
+### **Resource Management Files**
+- `resource-limit-range.yaml` - Set default and maximum resource limits for containers
+- `memory-limit-range.yaml` - Memory-specific limits for better resource control
+- `resource-quota.yaml` - Namespace-level resource consumption limits
+
+### **Service Accounts & Security**
+- `nginx-service-account.yaml` - Identity for pods to access Kubernetes API
+- `nginx-service-account-token.yaml` - Authentication token for service accounts
+- `taint-commands.md` - Commands for node taints and scheduling control
+
+### **ingress/** - Ingress controllers and rules
+Advanced traffic routing and SSL termination (examples coming soon).
+
+### **jobs/** - Job and CronJob definitions
+Run tasks to completion or on schedules (examples coming soon).
+
+### **volumes/** - Storage configurations (PV, PVC, StorageClass)
+Persistent storage for your applications (examples coming soon).
 
 ## Imperative vs Declarative Commands
 
@@ -90,6 +145,12 @@ kubectl create service nodeport nginx --tcp=80:80 --node-port=30080 --dry-run=cl
 (This will not use the pods labels as selectors)
 
 Both the above commands have their own challenges. While one of it cannot accept a selector the other cannot accept a node port. I would recommend going with the `kubectl expose` command. If you need to specify a node port, generate a definition file using the same command and manually input the nodeport before creating the service.
+
+### Secret
+Create a Secret with literal values:
+```bash
+kubectl create secret generic db-secret --from-literal=DB_Host=sql01 --from-literal=DB_User=root --from-literal=DB_Password=password123
+```
 
 ## Usage
 
